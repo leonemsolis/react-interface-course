@@ -1,9 +1,11 @@
-import {BiArchive} from "react-icons/bi";
+import { BiArchive } from "react-icons/bi";
 
 function App() {
   return (
-    <div>
-      <h1><BiArchive/> Your appointments</h1>
+    <div className="App container mx-auto mt-3 font-thin">
+      <h1 className="text-5xl">
+        <BiArchive className="inline-block text-red-400 align-top" />Your appointments
+      </h1>
     </div>
   );
 }
