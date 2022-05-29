@@ -7,6 +7,8 @@ import { useState, useEffect, useCallback } from "react";
 function App() {
   let [appointmentsData, setAppointmentsData] = useState([]);
   let [query, setQuery] = useState("");
+  let [sortBy, setSortBy] = useState("petName");
+  let [orderBy, setOrderBy] = useState("asc");
 
   let filterAppointments = appointmentsData.filter(item => {
     return (
@@ -14,6 +16,12 @@ function App() {
       item.ownerName.toLowerCase().includes(query.toLowerCase()) ||
       item.aptNotes.toLowerCase().includes(query.toLowerCase())
     )
+  }).sort((a, b) => {
+    let order = orderBy === "asc" ? 1 : -1;
+    return (
+      a[sortBy].toLowerCase() < b[sortBy].toLowerCase() ?
+        -1 * order : 1 * order
+    );
   });
 
   let fetchData = useCallback(() => {
@@ -32,7 +40,11 @@ function App() {
         <BiCalendar className="inline-block text-red-400 align-top" />Your appointments
       </h1>
       <AddAppointment />
-      <Search query={query} onQueryChanged={query => setQuery(query)} />
+      <Search query={query} onQueryChanged={query => setQuery(query)}
+        orderBy={orderBy}
+        onOrderByChanged={orderBy => setOrderBy(orderBy)}
+        sortBy={sortBy}
+        onSortByChanged={sortBy => setSortBy(sortBy)} />
 
       <ul className="divide-y divide-gray-200">
         {
