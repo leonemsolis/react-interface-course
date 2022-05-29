@@ -6,14 +6,17 @@ import { useState, useEffect, useCallback } from "react";
 
 function App() {
   let [appointmentsData, setAppointmentsData] = useState([]);
+
   let fetchData = useCallback(() => {
     fetch('./data.json')
       .then(response => response.json())
       .then(response => setAppointmentsData(response));
   }, []);
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
   return (
     <div className="App container mx-auto mt-3 font-thin">
       <h1 className="text-5xl mb-5">
@@ -24,7 +27,13 @@ function App() {
 
       <ul className="divide-y divide-gray-200">
         {
-          appointmentsData.map(appointment => <AppointmentInfo key={appointment.id} appointment={appointment} />)
+          appointmentsData.map(appointment =>
+            <AppointmentInfo key={appointment.id}
+              appointment={appointment}
+              onDeleteAppointment={(appointmentId) => {
+                setAppointmentsData(appointmentsData.filter(x => x.id !== appointmentId))
+              }}
+            />)
         }
       </ul>
     </div>
