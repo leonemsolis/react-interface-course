@@ -6,6 +6,15 @@ import { useState, useEffect, useCallback } from "react";
 
 function App() {
   let [appointmentsData, setAppointmentsData] = useState([]);
+  let [query, setQuery] = useState("");
+
+  let filterAppointments = appointmentsData.filter(item => {
+    return (
+      item.petName.toLowerCase().includes(query.toLowerCase()) ||
+      item.ownerName.toLowerCase().includes(query.toLowerCase()) ||
+      item.aptNotes.toLowerCase().includes(query.toLowerCase())
+    )
+  });
 
   let fetchData = useCallback(() => {
     fetch('./data.json')
@@ -23,11 +32,11 @@ function App() {
         <BiCalendar className="inline-block text-red-400 align-top" />Your appointments
       </h1>
       <AddAppointment />
-      <Search />
+      <Search query={query} onQueryChanged={query => setQuery(query)} />
 
       <ul className="divide-y divide-gray-200">
         {
-          appointmentsData.map(appointment =>
+          filterAppointments.map(appointment =>
             <AppointmentInfo key={appointment.id}
               appointment={appointment}
               onDeleteAppointment={(appointmentId) => {
